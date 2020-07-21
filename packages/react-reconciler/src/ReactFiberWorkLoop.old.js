@@ -578,9 +578,13 @@ export function scheduleUpdateOnFiber(
       // This is a legacy edge case. The initial mount of a ReactDOM.render-ed
       // root inside of batchedUpdates should be synchronous, but layout updates
       // should be deferred until the end of the batch.
+
+      
       performSyncWorkOnRoot(root);
     } else {
+      // batchedUpdates,setState等走这条路
       ensureRootIsScheduled(root, eventTime);
+      // 此函数将fiber放入batch队列中
       schedulePendingInteractions(root, lane);
       if (executionContext === NoContext) {
         // Flush the synchronous work now, unless we're already working or inside
@@ -592,6 +596,7 @@ export function scheduleUpdateOnFiber(
       }
     }
   } else {
+    
     // Schedule a discrete update but only if it's not Sync.
     if (
       (executionContext & DiscreteEventContext) !== NoContext &&
@@ -1012,6 +1017,7 @@ function markRootSuspended(root, suspendedLanes) {
 
 // This is the entry point for synchronous tasks that don't go
 // through Scheduler
+//非scheduler过手的都走这, 包括batched还有其他的
 function performSyncWorkOnRoot(root) {
   invariant(
     (executionContext & (RenderContext | CommitContext)) === NoContext,

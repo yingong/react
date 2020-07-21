@@ -190,7 +190,7 @@ export function applyDerivedStateFromProps(
     updateQueue.baseState = memoizedState;
   }
 }
-
+// classComponent,updater的几个方法, setState等api调用的内部方法
 const classComponentUpdater = {
   isMounted,
   enqueueSetState(inst, payload, callback) {
@@ -209,6 +209,7 @@ const classComponentUpdater = {
     }
 
     enqueueUpdate(fiber, update);
+    // 这一步进入scheduler
     scheduleUpdateOnFiber(fiber, lane, eventTime);
 
     if (__DEV__) {
